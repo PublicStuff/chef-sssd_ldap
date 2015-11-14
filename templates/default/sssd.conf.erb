@@ -1,14 +1,17 @@
 [sssd]
 config_file_version = 2
 services = nss, pam<% if node['sssd_ldap']['ldap_sudo'] %>, sudo<% end %>
-domains = LDAP
+domains = default
+re_expression = (?P<name>.+)
 
 [nss]
 filter_users = root,named,avahi,haldaemon,dbus,radiusd,news,nscd
 
 [pam]
 
-[domain/LDAP]
+[domain/default]
 <% node['sssd_ldap']['sssd_conf'].each do |key, value| %>
 <%=  key %> = <%= value %>
 <%end %>
+
+krb5_keytab=/etc/krb5.keytab
